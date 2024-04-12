@@ -24,10 +24,10 @@ jobs:
           BODY=$(cat .github/ISSUE_TEMPLATE/action-template.md)
 
           if [ -z "$STARTDATE" ]; then
-            STARTDATE=$(date -dlast-monday $(date -dnext-friday +%B %d, %Y)
+            STARTDATE=$(date -dlast-monday "+%B %d, %Y")
           fi
           if [ -z "$ENDDATE" ]; then
-            ENDDATE=$(date -dnext-friday $(date -dnext-friday +%B %d, %Y)
+            ENDDATE=$(date -dnext-friday "+%B %d, %Y")
           fi
 
           if [[ $CLOSE_PREVIOUS == true ]]; then
