@@ -1,4 +1,4 @@
-name: Create Issue
+name: Create Weekly Reflection
 on:
   schedule:
     - cron: '0 0 * * 1'
@@ -25,11 +25,11 @@ jobs:
 
           if [ -z "$STARTDATE" ]; then
             # Get the Monday of this week
-            STARTDATE=$(date -d "last monday" "+%B-%d")
+            STARTDATE=$(date -d "last monday" "+%B %d")
           fi
           if [ -z "$ENDDATE" ]; then
             # Get the Friday of this week
-            ENDDATE=$(date -d "friday this week" "+%B-%d, %Y")
+            ENDDATE=$(date -d "friday this week" "+%B %d, %Y")
           fi
 
           if [[ $CLOSE_PREVIOUS == true ]]; then
@@ -43,7 +43,7 @@ jobs:
             fi
           fi
           new_issue_url=$(gh issue create \
-            --title "Reflection for $STARTDATE - $ENDDATE" \
+            --title "Reflection: $STARTDATE - $ENDDATE" \
             --assignee "$ASSIGNEES" \
             --body "$BODY")
           if [[ $PINNED == true ]]; then
