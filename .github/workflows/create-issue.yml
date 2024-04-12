@@ -1,7 +1,7 @@
 name: Create Issue
 on:
   schedule:
-    - cron: 20 07 * * 1
+    - cron: '0 0 * * 1'
   workflow_dispatch:
       inputs:
         startdate:
@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Create an issue via an action
         run: |
-          BODY=$(cat .github/ISSUE_TEMPLATE/action-template.md)
+          BODY=$(cat .github/content-templates/action-template.md)
 
           if [ -z "$STARTDATE" ]; then
             STARTDATE=$(date -dlast-monday "+%B %d, %Y")
@@ -50,7 +50,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          ASSIGNEES: blakedebray
+          ASSIGNEES: ${{ github.repository_owner }}
           LABELS: weekly sync,docs-team
           STARTDATE: ${{ github.event.inputs.startdate }}
           ENDDATE: ${{ github.event.inputs.enddate }}
