@@ -21,12 +21,13 @@ jobs:
         uses: actions/checkout@v2
       - name: Create an issue via an action
         run: |
-        
+          BODY=$(cat .github/ISSUE_TEMPLATE/action-template.md)
+
           if [ -z "$STARTDATE" ]; then
-            STARTDATE=$(date -dlast-monday +%Y-%m-%d)
+            STARTDATE=$(date -dlast-monday $(date -dnext-friday +%B %d, %Y)
           fi
           if [ -z "$ENDDATE" ]; then
-            ENDDATE=$(date -dnext-friday +%Y-%m-%d)
+            ENDDATE=$(date -dnext-friday $(date -dnext-friday +%B %d, %Y)
           fi
 
           if [[ $CLOSE_PREVIOUS == true ]]; then
@@ -53,6 +54,5 @@ jobs:
           LABELS: weekly sync,docs-team
           STARTDATE: ${{ github.event.inputs.startdate }}
           ENDDATE: ${{ github.event.inputs.enddate }}
-          BODY: $(cat .github/ISSUE_TEMPLATE/action-template.md)
           PINNED: false
           CLOSE_PREVIOUS: false
