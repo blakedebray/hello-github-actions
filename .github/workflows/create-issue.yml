@@ -1,9 +1,15 @@
-name: Weekly Team Sync
+name: Create Issue
 on:
   schedule:
     - cron: 20 07 * * 1
   workflow_dispatch:
-
+      inputs:
+        startdate:
+          description: 'Start date (YYYY-MM-DD)'
+          required: false
+        enddate:
+          description: 'End date (YYYY-MM-DD)'
+          required: false
 jobs:
   create_issue:
     name: Create team sync issue
@@ -11,8 +17,18 @@ jobs:
     permissions:
       issues: write
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
       - name: Create an issue via an action
         run: |
+        
+          if [ -z "$STARTDATE" ]; then
+            STARTDATE=$(date -dlast-monday +%Y-%m-%d)
+          fi
+          if [ -z "$ENDDATE" ]; then
+            ENDDATE=$(date -dnext-friday +%Y-%m-%d)
+          fi
+
           if [[ $CLOSE_PREVIOUS == true ]]; then
             previous_issue_number=$(gh issue list \
               --label "$LABELS" \
@@ -24,7 +40,7 @@ jobs:
             fi
           fi
           new_issue_url=$(gh issue create \
-            --title "$TITLE" \
+            --title "Reflection for $STARTDATE - $ENDDATE" \
             --assignee "$ASSIGNEES" \
             --body "$BODY")
           if [[ $PINNED == true ]]; then
@@ -33,21 +49,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          TITLE: Auto-created issue
           ASSIGNEES: blakedebray
           LABELS: weekly sync,docs-team
-          BODY: |
-            ## Created via an action!!!
-            ### Agenda
-
-            - [ ] Start the recording
-            - [ ] Check-ins
-            - [ ] Discussion points
-            - [ ] Post the recording
-
-            ### Discussion Points
-            Add things to discuss below
-
-            - [Work this week](https://github.com/orgs/github/projects/3)
+          STARTDATE: ${{ github.event.inputs.startdate }}
+          ENDDATE: ${{ github.event.inputs.enddate }}
+          BODY: $(cat .github/ISSUE_TEMPLATE/action-template.md)
           PINNED: false
           CLOSE_PREVIOUS: false
