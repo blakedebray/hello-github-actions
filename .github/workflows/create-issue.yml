@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Create an issue via an action
         run: |
-          BODY=$(cat .github/content-templates/action-template.md)
+          BODY=$(cat .github/content-templates/reflection.md)
 
           if [ -z "$STARTDATE" ]; then
             STARTDATE=$(date -vmonday "%B-%d")
