@@ -24,10 +24,12 @@ jobs:
           BODY=$(cat .github/content-templates/reflection.md)
 
           if [ -z "$STARTDATE" ]; then
-            STARTDATE=$(date -vmonday "%B-%d")
+            # Get the Monday of this week
+            STARTDATE=$(date -d "last monday" "+%B-%d")
           fi
           if [ -z "$ENDDATE" ]; then
-            ENDDATE=$(date -vfriday "%B-%d, %Y")
+            # Get the Friday of this week
+            ENDDATE=$(date -d "friday this week" "+%B-%d, %Y")
           fi
 
           if [[ $CLOSE_PREVIOUS == true ]]; then
