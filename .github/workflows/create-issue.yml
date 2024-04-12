@@ -34,7 +34,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
           TITLE: Auto-created issue
-          ASSIGNEES: "@me"
+          ASSIGNEES: blakedebray
           LABELS: weekly sync,docs-team
           BODY: |
             ## Created via an action!!!
